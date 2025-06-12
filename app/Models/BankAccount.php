@@ -10,7 +10,6 @@ class BankAccount extends Model
 
     protected $table = 'bank_accounts';
     protected $fillable = ['owner_name', 'number_account', 'password', 'balance'];
-    private $dailyWithdrawLimit = 5000000;
 
     protected static function boot()
     {
@@ -32,42 +31,8 @@ class BankAccount extends Model
         return $this->balance ?? 0;
     }
 
-    // METHOD AN TOÀN để gửi tiền
-    public function deposit($amount)
-    {
-        if (!(is_numeric($amount)) || $amount < 0) {
-            throw new \InvalidArgumentException('Số tiền phải là số và lớn hơn 0.');
-        }
-        $this->balance = $this->getBalance() + $amount;
-        $this->save();
-        return $this->getBalance();
-    }
-
-    public function withdraw($amount)
-    {
-        if ($this->getBalance() < $amount) {
-            // dd($this->balance);
-
-
-            throw new \Exception('Số dư không đủ');
-        }
-        if ($amount > $this->getDailyWithdraw()) {
-            throw new \Exception('Vượt hạn mức cho phép ' . number_format($this->getDailyWithdraw()) . ' VNĐ');
-        }
-        $this->balance = $this->getBalance() - $amount;
-        $this->save();
-        return $this->getBalance();
-    }
-
     // Hạn mức rút tiền
-    public function getDailyWithdraw()
-    {
-        return $this->dailyWithdrawLimit;
-    }
-    public function setDailyWithdraw($newDailyWithdraw)
-    {
-        return $this->dailyWithdrawLimit = $newDailyWithdraw;
-    }
+
     public function generateNumberAccount()
     {
         do {

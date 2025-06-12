@@ -9,8 +9,8 @@ use App\Services\BankAccountService;
 
 class BankAccountController extends Controller
 {
-    protected $service;
-    protected $bankAccount;
+    protected BankAccountService $service;
+    protected BankAccount $bankAccount;
 
 
     public function __construct(BankAccountService $service, BankAccount $bankAccount)

@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\logic\BankAccountLogic;
 use App\Models\BankAccount;
 use Illuminate\Support\Facades\DB;
 
@@ -11,7 +12,10 @@ class BankAccountService
     {
         DB::beginTransaction();
         try {
-            $newbalance = $account->deposit($amount);
+            $bussinessLogic = new BankAccountLogic($account);
+
+            $newbalance = $bussinessLogic->deposit($amount);
+
             DB::commit();
             return [
                 'status' => 'success',
@@ -33,7 +37,8 @@ class BankAccountService
     {
         DB::beginTransaction();
         try {
-            $newbalance = $account->withdraw($amount);
+            $bussinessLogic = new BankAccountLogic($account);
+            $newbalance = $bussinessLogic->withdraw($amount);
             DB::commit();
             return [
                 'status' => 'success',

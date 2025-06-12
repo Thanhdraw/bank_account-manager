@@ -8,7 +8,7 @@
 <div class="alert alert-info">{{ session('status') }}</div>
 @endif
 
-<form method="POST" action="{{ route('accounts.deposit', $account) }}" class="mb-3">
+<form method="POST" action="{{ route('accounts.deposit', $account->id) }}" class="mb-3">
     @csrf
     <div class="input-group">
         <input type="number" name="amount" step="0.01" class="form-control" placeholder="Số tiền nạp" required>
@@ -16,7 +16,7 @@
     </div>
 </form>
 
-<form method="POST" action="{{ route('accounts.withdraw', $account) }}">
+<form method="POST" action="{{ route('accounts.withdraw', $account->id) }}">
     @csrf
     <div class="input-group">
         <input type="number" name="amount" step="0.01" class="form-control" placeholder="Số tiền rút" required>
