@@ -4,6 +4,7 @@ namespace App\Services;
 use App\logic\BankAccountLogic;
 use App\Models\BankAccount;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BankAccountService
 {
@@ -13,23 +14,18 @@ class BankAccountService
         DB::beginTransaction();
         try {
             $bussinessLogic = new BankAccountLogic($account);
-
             $newbalance = $bussinessLogic->deposit($amount);
 
             DB::commit();
-            return [
-                'status' => 'success',
-                'message' => 'Nạp tiền thành công.',
-                'balance' => $newbalance,
-            ];
+            return $this->successResponse(
+                'Nạp tiền thành công. Số dư mới: ' . number_format($newbalance, 0, ',', '.') . 'đ',
+                $newbalance
+            );
         } catch (\Throwable $th) {
             DB::rollBack();
-
-            return [
-                'status' => 'error',
-                'message' => 'Giao dịch thất bại: ' . $th->getMessage(),
-            ];
+            return $this->errorResponse('Nạp tiền thất bại: ' . $th->getMessage());
         }
+
 
     }
 
@@ -40,18 +36,32 @@ class BankAccountService
             $bussinessLogic = new BankAccountLogic($account);
             $newbalance = $bussinessLogic->withdraw($amount);
             DB::commit();
-            return [
-                'status' => 'success',
-                'message' => 'Rút tiền thành công',
-                'balance' => $newbalance
-            ];
+
+            return $this->successResponse(
+                'Rút tiền thành công. Số dư còn lại: ' . number_format($newbalance, 0, ',', '.') . 'đ',
+                $newbalance
+            );
         } catch (\Throwable $th) {
             DB::rollBack();
-            return [
-                'status' => 'error',
-                'message' => 'Giao dịch thất bại' . $th->getMessage(),
-            ];
+            return $this->errorResponse('Rút tiền thất bại: ' . $th->getMessage());
         }
+    }
+
+    private function successResponse(string $message, float $balance): array
+    {
+        return [
+            'status' => 'success',
+            'message' => $message,
+            'balance' => $balance,
+        ];
+    }
+
+    private function errorResponse(string $message): array
+    {
+        return [
+            'status' => 'error',
+            'message' => $message,
+        ];
     }
 
 }

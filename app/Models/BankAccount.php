@@ -25,11 +25,11 @@ class BankAccount extends Model
     {
         return $this->balance ?? 0;
     }
-    public function getFreshBalance()
-    {
-        $this->refresh();
-        return $this->balance ?? 0;
-    }
+    // public function getFreshBalance()
+    // {
+    //     $this->refresh();
+    //     return $this->balance ?? 0;
+    // }
 
     // Hạn mức rút tiền
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BankAccountRequest;
+use App\Http\Requests\TransactionRequest;
 use App\Models\BankAccount;
 use Illuminate\Http\Request;
 use App\Services\BankAccountService;
@@ -43,23 +44,24 @@ class BankAccountController extends Controller
         return view('public.accounts.show', compact('account'));
     }
 
-    public function deposit(Request $request, BankAccount $account)
+    public function deposit(TransactionRequest $request, $id)
     {
-        $result = $this->service->deposit($account, $request->amount);
-        if ($result['status'] === 'success') {
-            return redirect()->back()->with('success', $result['message']);
-        }
-        return redirect()->back()->with('error', $result['message']);
+
+        $data = $this->bankAccount->findOrFail($id);
+
+        $result = $this->service->deposit($data, $request->amount);
+
+        return redirect()->back()->with($result['status'], $result['message']);
 
     }
 
-    public function withdraw(Request $request, BankAccount $account)
+    public function withdraw(TransactionRequest $request, $id)
     {
 
-        $result = $this->service->withdraw($account, $request->amount);
-        if ($result['status'] === 'success') {
-            return redirect()->back()->with('success', $result['message']);
-        }
-        return redirect()->back()->with('error', $result['message']);
+        $data = $this->bankAccount->findOrFail($id);
+
+        $result = $this->service->withdraw($data, $request->amount);
+
+        return redirect()->back()->with($result['status'], $result['message']);
     }
 }

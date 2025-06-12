@@ -15,13 +15,14 @@ class BankAccountLogic extends BaseAccount
 
         $this->account->balance += $amount;
         $this->account->save();
-
         return $this->account->getBalance();
     }
 
     public function withdraw(float $amount): float
     {
+
         if ($this->account->getBalance() < $amount) {
+
             throw new \Exception('Số dư không đủ');
         }
 
