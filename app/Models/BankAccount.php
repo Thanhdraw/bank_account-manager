@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BankAccount extends Model
 {
 
     protected $table = 'bank_accounts';
-    protected $fillable = ['owner_name', 'number_account', 'password'];
+    protected $fillable = ['owner_name', 'number_account', 'password', 'balance'];
     private $dailyWithdrawLimit = 5000000;
 
     protected static function boot()
@@ -24,6 +25,11 @@ class BankAccount extends Model
 
     public function getBalance()
     {
+        return $this->balance ?? 0;
+    }
+    public function getFreshBalance()
+    {
+        $this->refresh();
         return $this->balance ?? 0;
     }
 
@@ -41,12 +47,14 @@ class BankAccount extends Model
     public function withdraw($amount)
     {
         if ($this->getBalance() < $amount) {
+            // dd($this->balance);
+
+
             throw new \Exception('Số dư không đủ');
         }
         if ($amount > $this->getDailyWithdraw()) {
             throw new \Exception('Vượt hạn mức cho phép ' . number_format($this->getDailyWithdraw()) . ' VNĐ');
         }
-
         $this->balance = $this->getBalance() - $amount;
         $this->save();
         return $this->getBalance();

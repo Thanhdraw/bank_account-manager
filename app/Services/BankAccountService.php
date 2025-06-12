@@ -33,7 +33,8 @@ class BankAccountService
     {
         DB::beginTransaction();
         try {
-            $newbalance = $account->withdraw($account);
+            $newbalance = $account->withdraw($amount);
+            DB::commit();
             return [
                 'status' => 'success',
                 'message' => 'Rút tiền thành công',
