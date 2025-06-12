@@ -13,9 +13,15 @@ return new class extends Migration {
         Schema::create('bank_accounts', function (Blueprint $table) {
             $table->id();
             $table->string('number_account', 10)->unique();
+            $table->string('email')->unique()->nullable();
+            $table->string('citizen_identification')->unique()->nullable();
+            $table->string('phone', 15)->nullable();
+            $table->string('image')->nullable();
             $table->string('owner_name');
             $table->string('password', 100);
-            $table->tinyInteger('status')->nullable();
+            $table->integer('number_of_transaction')->default(0);
+            $table->tinyInteger('status')->nullable(); //enum
+            $table->tinyInteger('type')->nullable(); //enum type 
             $table->decimal('balance', 15, 2)->default(0);
             $table->timestamps();
         });

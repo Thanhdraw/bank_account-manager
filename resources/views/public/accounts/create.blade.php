@@ -13,6 +13,7 @@
 
         <input type="number" name="password" class="form-control" required>
     </div>
+
     <button class="btn btn-success">Tạo</button>
 </form>
 @endsection
