@@ -18,6 +18,15 @@ class BankAccount extends Model
         'type' => TypeAccount::class
     ];
 
+    public function getBalance()
+    {
+        return $this->balance ?? 0;
+    }
+    public function getFreshBalance()
+    {
+        $this->refresh();
+        return $this->balance ?? 0;
+    }
     public function getStatusAccount(): ?StatusAccount
     {
         return $this->status;
@@ -33,7 +42,6 @@ class BankAccount extends Model
         return $this->type = $typeAccount;
     }
 
-
     protected static function boot()
     {
         parent::boot();
@@ -46,31 +54,30 @@ class BankAccount extends Model
         });
     }
 
-    public function getBalance()
+    public function checkAccountNumber($number)
     {
-        return $this->balance ?? 0;
+        return DB::table('bank_accounts')->where('number_account', $number)->exists();
     }
-    public function getFreshBalance()
-    {
-        $this->refresh();
-        return $this->balance ?? 0;
-    }
-
-
-
-    // Hạn mức rút tiền
 
     public function generateNumberAccount()
     {
         do {
             $generatedNumber = str_pad(rand(0, max: 9999999999), 10, '0', STR_PAD_LEFT);
 
-        } while (DB::table('bank_accounts')->where('number_account', $generatedNumber)->exists());
+        } while ($this->checkAccountNumber($generatedNumber));
+
         $this->number_account = $generatedNumber;
+
         return $this;
     }
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
 }

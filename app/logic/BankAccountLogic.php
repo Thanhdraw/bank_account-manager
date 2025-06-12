@@ -2,6 +2,8 @@
 
 namespace App\logic;
 
+use App\Models\Transaction;
+
 class BankAccountLogic extends BaseAccount
 {
 

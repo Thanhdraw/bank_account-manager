@@ -3,6 +3,8 @@
 namespace App\logic;
 
 use App\Models\BankAccount;
+use App\Models\Transaction;
+
 abstract class BaseAccount
 {
     protected BankAccount $account;
@@ -10,6 +12,7 @@ abstract class BaseAccount
     public function __construct(BankAccount $account)
     {
         $this->account = $account;
+
     }
 
     // Đây là method trừu tượng, bắt buộc class con phải implement
