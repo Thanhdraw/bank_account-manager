@@ -13,7 +13,8 @@ class BankAccountService
     {
         DB::beginTransaction();
         try {
-            $bussinessLogic = new BankAccountLogic($account);
+            $transactionService = new TransactionService();
+            $bussinessLogic = new BankAccountLogic($account, $transactionService);
             $newbalance = $bussinessLogic->deposit($amount);
 
             DB::commit();
@@ -33,7 +34,8 @@ class BankAccountService
     {
         DB::beginTransaction();
         try {
-            $bussinessLogic = new BankAccountLogic($account);
+            $transactionService = new TransactionService();
+            $bussinessLogic = new BankAccountLogic($account, $transactionService);
             $newbalance = $bussinessLogic->withdraw($amount);
             DB::commit();
 

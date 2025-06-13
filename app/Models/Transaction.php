@@ -10,12 +10,13 @@ class Transaction extends Model
 {
     //
     protected $table = 'transactions';
-    protected $fillable = ['type', 'status', 'amout', 'balance_after'];
+    protected $fillable = ['type', 'status', 'amount', 'balance_after', 'bank_account_id'];
 
     protected $casts = [
-        'type' => TypeTransaction::class,
-        'status' => StatusTransaction::class,
+        'type' => \App\Enums\TypeTransaction::class,
+        'status' => \App\Enums\StatusTransaction::class,
     ];
+
 
     public function bankAccount()
     {

@@ -7,17 +7,20 @@ use App\Http\Requests\TransactionRequest;
 use App\Models\BankAccount;
 use Illuminate\Http\Request;
 use App\Services\BankAccountService;
+use App\Services\TransactionService;
 
 class BankAccountController extends Controller
 {
     protected BankAccountService $service;
     protected BankAccount $bankAccount;
 
+    protected TransactionService $transactionService;
 
-    public function __construct(BankAccountService $service, BankAccount $bankAccount)
+    public function __construct(BankAccountService $service, BankAccount $bankAccount, TransactionService $transactionService)
     {
         $this->service = $service;
         $this->bankAccount = $bankAccount;
+        $this->transactionService = $transactionService;
     }
 
 

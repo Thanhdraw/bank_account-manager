@@ -4,14 +4,18 @@ namespace App\logic;
 
 use App\Models\BankAccount;
 use App\Models\Transaction;
+use App\Services\TransactionService;
 
 abstract class BaseAccount
 {
     protected BankAccount $account;
 
-    public function __construct(BankAccount $account)
+    protected TransactionService $transactionService;
+
+    public function __construct(BankAccount $account, TransactionService $transactionService)
     {
         $this->account = $account;
+        $this->transactionService = $transactionService;
 
     }
 
