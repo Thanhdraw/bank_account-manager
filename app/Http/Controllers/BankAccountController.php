@@ -19,7 +19,9 @@ class BankAccountController extends Controller
     public function __construct(BankAccountService $service, BankAccount $bankAccount, TransactionService $transactionService)
     {
         $this->service = $service;
+
         $this->bankAccount = $bankAccount;
+
         $this->transactionService = $transactionService;
     }
 
@@ -38,7 +40,9 @@ class BankAccountController extends Controller
     public function store(BankAccountRequest $request)
     {
         $data = $request->validated();
+
         $this->bankAccount->create($data);
+
         return redirect()->route('accounts.index')->with('success', 'Tạo tài khoản thành công');
     }
 

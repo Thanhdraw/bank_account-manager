@@ -61,6 +61,14 @@ class BankAccountLogic extends BaseAccount
         $this->account->balance -= $amount;
         $this->account->save();
 
+        $this->transactionService->createTransaction([
+            'bank_account_id' => $this->account->id,
+            'type' => TypeTransaction::Withdraw,
+            'status' => StatusTransaction::Success,
+            'amount' => $amount,
+            'balance_after' => $this->account->balance,
+        ]);
+
         return $this->account->getBalance();
     }
     public function getDailyWithdraw()
