@@ -1,43 +1,25 @@
-<div class="tab-pane fade" id="history" role="tabpanel">
-    <div class="card shadow-sm">
-        <div class="card-header bg-light">
-            <h6 class="mb-0">
-                <i class="fas fa-history me-2"></i>Lịch sử giao dịch
-            </h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Ngày</th>
-                            <th>Loại</th>
-                            <th>Số tiền</th>
-                            <th>Số dư</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>12/06/2025</td>
-                            <td><span class="badge bg-success">Nạp</span></td>
-                            <td>+500,000 VND</td>
-                            <td>1,500,000 VND</td>
-                        </tr>
-                        <tr>
-                            <td>11/06/2025</td>
-                            <td><span class="badge bg-danger">Rút</span></td>
-                            <td>-200,000 VND</td>
-                            <td>1,000,000 VND</td>
-                        </tr>
-                        <tr>
-                            <td>10/06/2025</td>
-                            <td><span class="badge bg-success">Nạp</span></td>
-                            <td>+1,200,000 VND</td>
-                            <td>1,200,000 VND</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Ngày</th>
+            <th>Loại</th>
+            <th>Số tiền</th>
+            <th>Số dư sau</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($info['data'] as $item)
+            <tr>
+                <td>{{ \Carbon\Carbon::parse($item['created_at'])->format('d/m/Y H:i') }}</td>
+                <td>{{ \App\Enums\TypeTransaction::from($item['type'])->label() }}</td>
+                <td>
+                    <span class="badge {{ $item['type'] == 10 ? 'bg-success' : 'bg-danger' }}">
+                        {{ $type[$item['type']] ?? 'Không rõ' }}
+                    </span>
+                </td>
+
+                <td>{{ number_format($item['balance_after'], 0, ',', '.') }} đ</td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>

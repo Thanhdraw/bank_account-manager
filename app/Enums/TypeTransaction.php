@@ -16,4 +16,11 @@ enum TypeTransaction: int
             self::Withdraw => 'Rút tiền',
         };
     }
+    public static function asSelectArray(): array
+    {
+        return [
+            self::Deposit->value => self::Deposit->label(),
+            self::Withdraw->value => self::Withdraw->label(),
+        ];
+    }
 }

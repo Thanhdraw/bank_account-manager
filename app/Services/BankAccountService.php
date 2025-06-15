@@ -49,6 +49,28 @@ class BankAccountService
         }
     }
 
+
+    public function getInfoTransaction(BankAccount $account): array
+    {
+        DB::beginTransaction();
+        try {
+            $transactionService = new TransactionService();
+            $bussinessLogic = new BankAccountLogic($account, $transactionService);
+            $info = $bussinessLogic->getInfoTransaction();
+            DB::commit();
+           return [
+            'status' => 'success',
+            'message' => 'Lấy thông tin tài khoản thành công',
+            'data' => $info,
+        ];
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->errorResponse(
+                'error' . $th->getMessage()
+            );
+        }
+    }
+
     private function successResponse(string $message, float $balance): array
     {
         return [

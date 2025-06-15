@@ -10,17 +10,22 @@ use App\Services\TransactionService;
 
 class BankAccountLogic extends BaseAccount
 {
-
     private $dailyWithdrawLimit = 5000000;
+    public function getDailyWithdraw()
+    {
+        return $this->dailyWithdrawLimit;
+    }
+    public function setDailyWithdraw($newDailyWithdraw)
+    {
+        return $this->dailyWithdrawLimit = $newDailyWithdraw;
+    }
+
+
     protected BankAccount $bankAccount;
     public function __construct(BankAccount $bankAccount, TransactionService $transaction)
     {
         parent::__construct($bankAccount, $transaction);
     }
-
-
-
-
 
     // METHOD AN TOÀN để gửi tiền
     public function deposit(float $amount): float
@@ -71,12 +76,16 @@ class BankAccountLogic extends BaseAccount
 
         return $this->account->getBalance();
     }
-    public function getDailyWithdraw()
+
+    public function getInfoTransaction()
     {
-        return $this->dailyWithdrawLimit;
+        return Transaction::where('bank_account_id', $this->account->id)
+            ->whereIn('type', [TypeTransaction::Deposit, TypeTransaction::Withdraw])
+            ->orderByDesc('created_at')
+            ->get()
+            ->toArray();
     }
-    public function setDailyWithdraw($newDailyWithdraw)
-    {
-        return $this->dailyWithdrawLimit = $newDailyWithdraw;
-    }
+
+
+
 }

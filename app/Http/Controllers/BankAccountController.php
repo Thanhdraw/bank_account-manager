@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TypeTransaction;
 use App\Http\Requests\BankAccountRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Models\BankAccount;
@@ -46,9 +47,13 @@ class BankAccountController extends Controller
         return redirect()->route('accounts.index')->with('success', 'Tạo tài khoản thành công');
     }
 
-    public function show(BankAccount $account)
+    public function show($id)
     {
-        return view('public.accounts.show', compact('account'));
+        $account = $this->bankAccount->findOrFail($id);
+        $getInfoTransaction = $this->service->getInfoTransaction($account);
+        return view('public.accounts.show', compact('account'))
+            ->with('type',TypeTransaction::asSelectArray())
+            ->with('info', $getInfoTransaction);
     }
 
     public function deposit(TransactionRequest $request, $id)

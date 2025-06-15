@@ -13,10 +13,16 @@ class BankAccount extends Model
     protected $table = 'bank_accounts';
     protected $fillable = ['owner_name', 'number_account', 'password', 'balance', 'status'];
 
+
     protected $casts = [
         'status' => StatusAccount::class,
         'type' => TypeAccount::class
     ];
+
+    public function getNumberTransaction()
+    {
+        return $this->number_of_transaction;
+    }
 
     public function getBalance()
     {
@@ -51,6 +57,7 @@ class BankAccount extends Model
             $account->balance = 0;
             $account->setStatusAccount(StatusAccount::Active);
             $account->setTypeAccout(TypeAccount::Basic);
+
         });
     }
 

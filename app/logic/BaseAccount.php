@@ -12,6 +12,8 @@ abstract class BaseAccount
 
     protected TransactionService $transactionService;
 
+   
+
     public function __construct(BankAccount $account, TransactionService $transactionService)
     {
         $this->account = $account;
